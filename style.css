@@ -1,0 +1,46 @@
+div:not(id="game") {
+    background-color: #303030;
+}
+
+#game>div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game {
+    width: 100%;
+    height: 100%;
+    background-color: #151515;
+    display: grid;
+}
+
+.background {
+    background-color: #303030;
+    color: #303030;
+    margin: 1px;
+}
+
+.snake {
+    background-color: #ffffff;
+    color: #ffffff;
+}
+
+.snake-head {
+    background-color: lightblue;
+}
+
+.apple {
+    background-color: red;
+    color: red;
+}
+
+.bomb {
+    background-color: black;
+    color:red;
+}
+
+.destroyed {
+    background-color: #000000;
+    color: #000000;
+}
