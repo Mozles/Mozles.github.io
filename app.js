@@ -1,6 +1,5 @@
 let columns, rows, snakePrev = document.createElement("div")
 let score = 3,
-    size = 2,
     appleCount = 0,
     timer = 0,
     pace = 500
@@ -12,9 +11,8 @@ let screenWidth = window.screen.width,
 function loadGame() {
     let game = document.querySelector("#game")
 
-    size = prompt("podaj rozmiar planszy") || 2
-    columns = (ratio>1) ? 16*size : 9*size
-    rows = (ratio>1) ? 9*size : 16*size
+    columns = (ratio>1) ? 30 : 10
+    rows = (ratio>1) ? 20 : 20
 
     if (ratio<1) document.querySelector("#movement").style.visibility = "visible"
 
@@ -93,12 +91,13 @@ function updateSnake(x=0,y=0) {
     }
     else if (cell.classList.contains("apple")) {
         cell.classList.remove("apple")
+        cell.classList.add("snake-head")
         appleCount--
         score++
     }
     else if (cell.classList.contains("bomb")) {
         cell.classList.remove("bomb")
-        cell.classList.add("background")
+        cell.classList.add("snake-head")
         cell.innerText = 0
         spawn(1,"bomb")
     }
@@ -111,7 +110,6 @@ function updateSnake(x=0,y=0) {
     cell.innerText = score
     
     snakePrev = cell
-
     reduceSnake()
 }
 
@@ -141,7 +139,9 @@ function spawn(amount=1, thing="apple") {
                     appleCount++
                     break
                 case "bomb":
-                    cell.innerText = pace/1000 * 60 * size**2 /2
+                    let magnitude = Math.ceil(Math.abs(Math.sqrt((x-snake.x)**2 + (y-snake.y)**2)))
+                    if (magnitude<4) magnitude = 4
+                    cell.innerText = magnitude**2
                     break
                 default:
                     break
@@ -156,6 +156,7 @@ function spawn(amount=1, thing="apple") {
 function updateBomb() {
     let bombs = document.querySelectorAll(".bomb")
     bombs.forEach(bomb => {
+
         if (bomb.innerText>0) {
             bomb.innerText -= 1
         }
@@ -165,6 +166,7 @@ function updateBomb() {
             
             let x1 = coords[0]
             let y1 = coords[1]
+
             let radius = 2
             for (let x = x1-radius; x<=x1+radius; x++) {
                 for (let y = y1-radius; y<=y1+radius;y++) {
@@ -189,10 +191,11 @@ const game = async () => {
     await loadGame()
 
     spawn(1, "bomb")
-    
+
     while (true) {
         moveSnake()
         updateSnake(snake.x, snake.y)
+
         updateBomb()
 
         if(appleCount==0) {
